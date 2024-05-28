@@ -1,0 +1,22 @@
+{
+  "name": "cozco-workshop",
+  "version": "1.0.0",
+  "description": "Workshop Cozco",
+  "main": "index.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/ikramchehouani/cozco-workshop.git"
+  },
+  "author": "Ikram Chehouani and Armel Steve Ouetchoua",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/ikramchehouani/cozco-workshop/issues"
+  },
+  "homepage": "https://github.com/ikramchehouani/cozco-workshop#readme",
+  "dependencies": {
+    "mongodb": "^6.6.2"
+  }
+}
