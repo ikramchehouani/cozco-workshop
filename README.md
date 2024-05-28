@@ -1,5 +1,5 @@
 # cozco-workshop
-Workshop pour le client Cozco
+Refactory of the website www.cozco.fr
 
 # Getting Started with Create React App
 
