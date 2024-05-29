@@ -1,28 +1,28 @@
-# cozco-workshop
-Refactory of the website www.cozco.fr
+#Cozco Workshop - Backend of the Backoffice
 
-# Getting Started with Create React App
+Backoffice for the website www.cozco.fr
 
-## Available Scripts
+#Prerequisites
+Node.js
+npm (Node Package Manager)
+MongoDB
 
-In the project directory, you can run:
+#Setting up the Backend
+Clone the backend repository (if not already done):
+git clone https://github.com/ikramchehouani/cozco-backoffice-backend.git
 
-### `npm start`
+#Install backend dependencies:
 
-Runs the app in the development mode.\
-Open [http://localhost:3000](http://localhost:3000) to view it in your browser.
+npm install
 
-The page will reload when you make changes.\
-You may also see any lint errors in the console.
+#Create a MongoDB database:
 
-### `npm test`
+Ensure MongoDB is running on your machine.
+Create a database named cozco-backoffice.
 
-Launches the test runner in the interactive watch mode.\
+#Set up environment variables (create a .env file):
+MONGO_URL
 
-### `npm run build`
+#Run the backend server:
+node server.js
 
-Builds the app for production to the `build` folder.\
-It correctly bundles React in production mode and optimizes the build for the best performance.
-
-The build is minified and the filenames include the hashes.\
-Your app is ready to be deployed!
