@@ -1,9 +1,11 @@
-module.exports = function(roles) {
+module.exports = function(requiredRoles) {
     return function(req, res, next) {
-        if (req.user && roles.includes(req.user.roles)) {
+        const userRole = req.user.role;
+
+        if (requiredRoles.includes(userRole)) {
             next();
         } else {
-            return res.status(403).json({ message: 'Insufficient permissions' });
+            res.status(403).json({ message: 'Insufficient permissions' });
         }
     };
 };

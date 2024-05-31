@@ -1,4 +1,5 @@
 const Article = require('../model/articleModel');
+const mongoose = require('mongoose');
 
 // Get all articles
 exports.getAllArticles = async (req, res) => {
@@ -38,7 +39,12 @@ exports.createArticle = async (req, res) => {
 };
 
 // Update an article
+
 exports.updateArticle = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid article ID' });
+    }
+
     try {
         const article = await Article.findById(req.params.id);
         if (!article) return res.status(404).json({ message: 'Article not found' });
@@ -56,11 +62,14 @@ exports.updateArticle = async (req, res) => {
 
 // Delete an article
 exports.deleteArticle = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid article ID' });
+    }
+
     try {
-        const article = await Article.findById(req.params.id);
+        const article = await Article.findByIdAndDelete(req.params.id);
         if (!article) return res.status(404).json({ message: 'Article not found' });
 
-        await article.remove();
         res.json({ message: 'Article deleted' });
     } catch (err) {
         res.status(500).json({ message: err.message });
