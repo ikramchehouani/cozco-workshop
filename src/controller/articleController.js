@@ -13,6 +13,10 @@ exports.getAllArticles = async (req, res) => {
 
 // Get a single article by ID
 exports.getArticle = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid article ID' });
+    }
+
     try {
         const article = await Article.findById(req.params.id);
         if (!article) return res.status(404).json({ message: 'Article not found' });
@@ -24,10 +28,14 @@ exports.getArticle = async (req, res) => {
 
 // Create a new article
 exports.createArticle = async (req, res) => {
+    const { title, description, quantity, photo, author } = req.body;
+
     const article = new Article({
-        title: req.body.title,
-        content: req.body.content,
-        author: req.body.author
+        title,
+        description,
+        quantity,
+        photo,
+        author
     });
 
     try {
@@ -39,7 +47,6 @@ exports.createArticle = async (req, res) => {
 };
 
 // Update an article
-
 exports.updateArticle = async (req, res) => {
     if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
         return res.status(400).json({ message: 'Invalid article ID' });
@@ -50,7 +57,9 @@ exports.updateArticle = async (req, res) => {
         if (!article) return res.status(404).json({ message: 'Article not found' });
 
         if (req.body.title) article.title = req.body.title;
-        if (req.body.content) article.content = req.body.content;
+        if (req.body.description) article.description = req.body.description;
+        if (req.body.quantity) article.quantity = req.body.quantity;
+        if (req.body.photo) article.photo = req.body.photo;
         if (req.body.author) article.author = req.body.author;
 
         const updatedArticle = await article.save();
