@@ -4,11 +4,11 @@ const articleController = require('../controller/articleController');
 const verifyToken = require('../middleware/verifyToken');
 const checkRole = require('../middleware/checkRole');
 
-// Routes for site users (read-only)
-router.get('/articles', checkRole(['site', 'backoffice']), articleController.getAllArticles);
-router.get('/article/:id', checkRole(['site', 'backoffice']), articleController.getArticle);
+// Routes pour les utilisateurs du site (lecture seule)
+router.get('/articles', articleController.getAllArticles);
+router.get('/article/:id', articleController.getArticle);
 
-// Routes for backoffice users (CRUD)
+// Routes pour les utilisateurs du backoffice (CRUD)
 router.post('/article', verifyToken, checkRole(['backoffice']), articleController.createArticle);
 router.put('/article/:id', verifyToken, checkRole(['backoffice']), articleController.updateArticle);
 router.delete('/article/:id', verifyToken, checkRole(['backoffice']), articleController.deleteArticle);

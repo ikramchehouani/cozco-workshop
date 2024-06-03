@@ -1,73 +1,86 @@
 const Article = require('../model/articleModel');
+const mongoose = require('mongoose');
 
-// Controller function to get an article by ID
-exports.getArticle = async (req, res) => {
-    try {
-        const articleId = req.params.id;
-        const article = await Article.findById(articleId);
-
-        if (!article) {
-            return res.status(404).json({ message: 'Article not found' });
-        }
-
-        res.status(200).json(article);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
-    }
-};
-
-// Controller function to get all articles
+// Get all articles
 exports.getAllArticles = async (req, res) => {
     try {
         const articles = await Article.find();
-        res.status(200).json(articles);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.json(articles);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };
 
-// # Additional CRUD operations for backoffice #
+// Get a single article by ID
+exports.getArticle = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid article ID' });
+    }
+
+    try {
+        const article = await Article.findById(req.params.id);
+        if (!article) return res.status(404).json({ message: 'Article not found' });
+        res.json(article);
+    } catch (err) {
+        res.status(500).json({ message: err.message });
+    }
+};
 
 // Create a new article
 exports.createArticle = async (req, res) => {
+    const { title, description, quantity, photo, author } = req.body;
+
+    const article = new Article({
+        title,
+        description,
+        quantity,
+        photo,
+        author
+    });
+
     try {
-        const { title, content, author } = req.body;
-        const newArticle = new Article({ title, content, author });
-        await newArticle.save();
+        const newArticle = await article.save();
         res.status(201).json(newArticle);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
 };
 
-// Update an article by ID
+// Update an article
 exports.updateArticle = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid article ID' });
+    }
+
     try {
-        const articleId = req.params.id;
-        const updatedArticle = await Article.findByIdAndUpdate(articleId, req.body, { new: true });
+        const article = await Article.findById(req.params.id);
+        if (!article) return res.status(404).json({ message: 'Article not found' });
 
-        if (!updatedArticle) {
-            return res.status(404).json({ message: 'Article not found' });
-        }
+        if (req.body.title) article.title = req.body.title;
+        if (req.body.description) article.description = req.body.description;
+        if (req.body.quantity) article.quantity = req.body.quantity;
+        if (req.body.photo) article.photo = req.body.photo;
+        if (req.body.author) article.author = req.body.author;
 
-        res.status(200).json(updatedArticle);
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        const updatedArticle = await article.save();
+        res.json(updatedArticle);
+    } catch (err) {
+        res.status(400).json({ message: err.message });
     }
 };
 
-// Delete an article by ID
+// Delete an article
 exports.deleteArticle = async (req, res) => {
+    if (!mongoose.Types.ObjectId.isValid(req.params.id)) {
+        return res.status(400).json({ message: 'Invalid article ID' });
+    }
+
     try {
-        const articleId = req.params.id;
-        const deletedArticle = await Article.findByIdAndDelete(articleId);
+        const article = await Article.findByIdAndDelete(req.params.id);
+        if (!article) return res.status(404).json({ message: 'Article not found' });
 
-        if (!deletedArticle) {
-            return res.status(404).json({ message: 'Article not found' });
-        }
-
-        res.status(200).json({ message: 'Article deleted successfully' });
-    } catch (error) {
-        res.status(500).json({ message: 'Server error', error });
+        res.json({ message: 'Article deleted' });
+    } catch (err) {
+        res.status(500).json({ message: err.message });
     }
 };

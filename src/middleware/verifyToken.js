@@ -1,18 +1,17 @@
 const jwt = require('jsonwebtoken');
 require('dotenv').config();
 
-module.exports = function(req, res, next) {
-    const token = req.headers['authorization'];
-    const role = req.headers['role']; // Extrayez le rôle des en-têtes de la demande
+const secretKey = process.env.SECRET_KEY;
 
+module.exports = (req, res, next) => {
+    const token = req.headers['authorization'];
     if (!token || !token.startsWith('Bearer ')) {
         return res.status(403).json({ message: 'Token is missing or has incorrect format' });
     }
 
     try {
-        const verified = jwt.verify(token.split(' ')[1], process.env.JWT_SECRET);
+        const verified = jwt.verify(token.split(' ')[1], secretKey);
         req.user = verified;
-        req.role = role; // Passez le rôle à travers la demande
         next();
     } catch (error) {
         res.status(403).json({ message: 'Invalid token', error: error.message });

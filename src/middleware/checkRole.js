@@ -1,12 +1,11 @@
-// Middleware to check user roles
-module.exports = function(roles) {
+module.exports = function(requiredRoles) {
     return function(req, res, next) {
-        // Si l'utilisateur est un site ou un backoffice, autorisez la requête
-        if (roles.includes('site') || roles.includes('backoffice')) {
+        const userRole = req.user.role;
+
+        if (requiredRoles.includes(userRole)) {
             next();
         } else {
-            // Sinon, renvoyer une erreur d'autorisation
-            return res.status(403).json({ message: 'Insufficient permissions' });
+            res.status(403).json({ message: 'Insufficient permissions' });
         }
     };
 };
