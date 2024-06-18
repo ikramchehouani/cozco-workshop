@@ -8,7 +8,7 @@ const checkRole = require('../middleware/checkRole');
 router.post('/signup', verifyToken, checkRole(['backoffice']), authController.signup);
 router.post('/signin', authController.signin);
 router.post('/signout', verifyToken, authController.signout);
-router.delete('/delete-account/:id', verifyToken, checkRole(['backoffice']), authController.deleteAccountById);
+router.delete('/delete-user/:id', verifyToken, checkRole(['backoffice']), authController.deleteAccountById);
 router.put('/update-user/:id', verifyToken, checkRole(['backoffice']), authController.updateUserById);
 router.get('/users', verifyToken, checkRole(['backoffice']), authController.getBackofficeUsers);
 router.get('/user/:id', verifyToken, checkRole(['backoffice']), authController.getUserById);
