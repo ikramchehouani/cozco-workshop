@@ -8,7 +8,7 @@ const standardPassword = "Cozco2024@!";
 
 // Signup
 exports.signup = async (req, res) => {
-    const { email, role } = req.body;
+    const { email, firstName, lastName, name, role } = req.body;
 
     try {
         const existingUser = await User.findOne({ email });
@@ -21,6 +21,9 @@ exports.signup = async (req, res) => {
 
         const newUser = await User.create({
             email,
+            firstName,
+            lastName,
+            name,
             password: hashedPassword,
             role,
             mustChangePassword: true
@@ -64,13 +67,45 @@ exports.signout = (req, res) => {
     res.status(200).json({ message: 'User signed out successfully' });
 };
 
-// Delete account
-exports.deleteAccount = async (req, res) => {
-    const userId = req.user.userId;
+// Delete account by ID
+exports.deleteAccountById = async (req, res) => {
+    const { id } = req.params;
 
     try {
-        await User.findByIdAndDelete(userId);
+        const deletedUser = await User.findByIdAndDelete(id);
+
+        if (!deletedUser) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
         res.status(200).json({ message: 'User account deleted successfully' });
+    } catch (error) {
+        console.error(error);
+        res.status(500).json({ message: 'Server error' });
+    }
+};
+
+// Update user by ID
+exports.updateUserById = async (req, res) => {
+    const { id } = req.params;
+    const { email, firstName, lastName, name, role, password } = req.body;
+
+    try {
+        const user = await User.findById(id);
+
+        if (!user) {
+            return res.status(404).json({ message: 'User not found' });
+        }
+
+        if (email) user.email = email;
+        if (firstName) user.firstName = firstName;
+        if (lastName) user.lastName = lastName;
+        if (name) user.name = name;
+        if (role) user.role = role;
+        if (password) user.password = await bcrypt.hash(password, 10);
+
+        const updatedUser = await user.save();
+        res.status(200).json({ message: 'User updated successfully', user: updatedUser });
     } catch (error) {
         console.error(error);
         res.status(500).json({ message: 'Server error' });
@@ -128,8 +163,10 @@ exports.getBackofficeUsers = async (req, res) => {
 
 // Get user by ID
 exports.getUserById = async (req, res) => {
+    const { id } = req.params;
+
     try {
-        const user = await User.findById(req.params.id);
+        const user = await User.findById(id);
         if (!user) {
             return res.status(404).json({ message: 'User not found' });
         }

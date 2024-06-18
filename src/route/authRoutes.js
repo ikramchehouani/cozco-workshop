@@ -2,14 +2,17 @@ const express = require('express');
 const router = express.Router();
 const authController = require('../controller/authController');
 const verifyToken = require('../middleware/verifyToken');
+const checkRole = require('../middleware/checkRole');
 
-router.post('/signup', verifyToken, authController.signup);
+// Auth routes
+router.post('/signup', verifyToken, checkRole(['backoffice']), authController.signup);
 router.post('/signin', authController.signin);
 router.post('/signout', verifyToken, authController.signout);
-router.delete('/delete-account', verifyToken, authController.deleteAccount);
+router.delete('/delete-account/:id', verifyToken, checkRole(['backoffice']), authController.deleteAccountById);
+router.put('/update-user/:id', verifyToken, checkRole(['backoffice']), authController.updateUserById);
+router.get('/users', verifyToken, checkRole(['backoffice']), authController.getBackofficeUsers);
+router.get('/user/:id', verifyToken, checkRole(['backoffice']), authController.getUserById);
 router.post('/send-reset-link', authController.sendResetLink);
 router.post('/reset-password', authController.resetPassword);
-router.get('/backoffice-users', verifyToken, authController.getBackofficeUsers);
-router.get('/backoffice-user/:id', verifyToken, authController.getUserById);
 
 module.exports = router;
