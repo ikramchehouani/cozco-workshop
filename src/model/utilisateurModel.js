@@ -14,6 +14,10 @@ const userSchema = new mongoose.Schema({
         type: String,
         enum: ['site', 'backoffice'],
         default: 'site'
+    },
+    mustChangePassword: {
+        type: Boolean,
+        default: false
     }
 });
 
