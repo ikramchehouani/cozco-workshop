@@ -10,6 +10,10 @@ const quantitySchema = new mongoose.Schema({
     price: {
         type: Number,
         required: true
+    },
+    quantityType: {
+        type: Number,
+        required: true
     }
 });
 

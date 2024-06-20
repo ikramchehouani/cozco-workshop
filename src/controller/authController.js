@@ -8,7 +8,7 @@ const standardPassword = "Cozco2024@!";
 
 // Signup
 exports.signup = async (req, res) => {
-    const { email, firstName, lastName, name, role } = req.body;
+    const { email, firstName, lastName, role } = req.body;
 
     try {
         const existingUser = await User.findOne({ email });
@@ -23,7 +23,6 @@ exports.signup = async (req, res) => {
             email,
             firstName,
             lastName,
-            name,
             password: hashedPassword,
             role,
             mustChangePassword: true
