@@ -6,7 +6,7 @@ require('dotenv').config();
 const secretKey = process.env.SECRET_KEY;
 const standardPassword = process.env.PASSWORD;
 
-// Signup
+// Signup for users
 exports.signup = async (req, res) => {
     const { email, firstName, lastName, role } = req.body;
 
