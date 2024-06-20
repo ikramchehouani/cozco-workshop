@@ -5,6 +5,7 @@ require('dotenv').config();
 
 const authRoutes = require('./src/route/authRoutes');
 const articleRoutes = require('./src/route/articleRoutes');
+const commandeRoutes = require('./src/route/commandeRoutes');
 
 const app = express();
 const PORT = process.env.PORT || 8080;
@@ -21,6 +22,7 @@ mongoose.connect(process.env.MONGODB_URI, { useNewUrlParser: true, useUnifiedTop
 // Routes
 app.use('/api/auth', authRoutes);
 app.use('/api', articleRoutes);
+app.use('/api', commandeRoutes);
 
 // Start server
 app.listen(PORT, () => console.log(`Server is running on port ${PORT}`));

@@ -4,7 +4,7 @@ const User = require('../model/utilisateurModel');
 require('dotenv').config();
 
 const secretKey = process.env.SECRET_KEY;
-const standardPassword = "Cozco2024@!";
+const standardPassword = process.env.PASSWORD;
 
 // Signup
 exports.signup = async (req, res) => {

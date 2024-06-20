@@ -4,7 +4,7 @@ const mongoose = require('mongoose');
 const quantitySchema = new mongoose.Schema({
     packageType: {
         type: String,
-        enum: ['16 bottles of 1L', '32 bottles of 50cl'],
+        enum: ['16 bouteilles 1L', '32 bouteilles 50cl'],
         required: true
     },
     price: {
